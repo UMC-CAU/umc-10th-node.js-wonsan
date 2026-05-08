@@ -1,26 +1,44 @@
-import { StoreCreateRequest, bodyToStore, responseFromStore } from "../dtos/store.dto.js";
-import { addStore, findRegionById, getStore } from "../repositories/store.repository.js";
+import {
+  StoreCreateRequest,
+  StoreCreateResponse,
+  bodyToStore,
+  responseFromStore,
+  ReviewListResponse,
+  responseFromReviews,
+} from "../dtos/store.dto.js";
 
-export const createStore = async (regionId: number, body: StoreCreateRequest) => {
-  if (!body.name || !body.address) {
-    throw new Error("가게 이름과 주소는 필수입니다.");
-  }
+import {
+  addStore,
+  findRegionById,
+  getStore,
+  getAllStoreReviews,
+} from "../repositories/store.repository.js";
 
-  const region = await findRegionById(regionId);
-
-  if (!region) {
-    throw new Error("존재하지 않는 지역입니다.");
-  }
-
-  const storeData = bodyToStore(body);
-
-  const storeId = await addStore(regionId, storeData);
+export const createStore = async (
+  regionId: number,
+  data: StoreCreateRequest
+): Promise<StoreCreateResponse> => {
+  const storeId = await addStore({
+    regionId,
+    name: data.name,
+    address: data.address,
+  });
 
   const store = await getStore(storeId);
 
-  if (!store) {
-    throw new Error("가게 정보를 찾을 수 없습니다.");
-  }
+  return {
+    storeId: store.id,
+    name: store.name,
+    address: store.address,
+    regionId: store.regionId,
+    regionName: store.region.name,
+  };
+};
 
-  return responseFromStore(store);
+export const listStoreReviews = async (
+  storeId: number,
+  cursor:number
+): Promise<ReviewListResponse> => {
+  const reviews = await getAllStoreReviews(storeId, cursor);
+  return responseFromReviews(reviews);
 };

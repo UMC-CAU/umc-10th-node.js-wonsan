@@ -27,19 +27,19 @@ export const bodyToUser = (body: UserSignUpRequest) => {
 
 // user.converter.ts
 
-export const responseFromUser = (user: any, preferences: any[]) => {
-  return {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    gender: user.gender,
-    birth: user.birth,
-    address: user.address,
-    detailAddress: user.detail_address,
-    phoneNumber: user.phone_number,
-    preferences: preferences.map((preference) => ({
-      id: preference.food_category_id,
-      name: preference.name,
-    })),
-  };
-};
+export interface UserSignUpResponse {
+  email: string;
+  name: string;
+  preferCategory: string[];
+}
+
+export const responseFromUser= (data: {user:any, preferences: any[]}): UserSignUpResponse => {
+    const preferCategory= data.preferences.map((p)=>p.foodCategory.name);
+
+    return {
+        email: data.user.email,
+        name: data.user.name,
+        preferCategory,
+    }
+
+}
