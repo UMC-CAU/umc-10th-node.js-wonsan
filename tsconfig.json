@@ -15,7 +15,8 @@
     /* 엄격한 검사 옵션 (에러를 미리 잡는 핵심!) */
     "strict": true,               
     "noUncheckedIndexedAccess": true, 
-    
+    /*데코레이터 문법 사용 여부*/
+    "experimentalDecorators": true,
     /* 기타 추천 옵션 */
     "skipLibCheck": true,         
     "esModuleInterop": true,      

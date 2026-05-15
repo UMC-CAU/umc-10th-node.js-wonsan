@@ -1,19 +1,13 @@
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool, prisma } from "../../../db.config.js";
 
-export const findRegionById = async (regionId: number): Promise<any | null> => {
-  const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT * FROM region WHERE id = ?;`,
-    [regionId]
-  );
-
-  if (rows.length === 0) {
-    return null;
-  }
-
-  return rows[0];
+export const findRegionById = async (regionId: number) => {
+  return await prisma.region.findUnique({
+    where: {
+      id: regionId,
+    },
+  });
 };
-
 
 export const addStore = async (data: {
   regionId: number;
@@ -32,7 +26,7 @@ export const addStore = async (data: {
 };
 
 export const getStore = async (storeId: number) => {
-  return await prisma.store.findUniqueOrThrow({
+  return await prisma.store.findUnique({
     where: {
       id: storeId,
     },
@@ -41,7 +35,6 @@ export const getStore = async (storeId: number) => {
     },
   });
 };
-
 
 export const getAllStoreReviews = async (
   storeId: number,

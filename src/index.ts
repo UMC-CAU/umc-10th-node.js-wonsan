@@ -1,26 +1,67 @@
-// import dotenv from "dotenv";
-// import express, { Express, Request, Response } from "express";
-// import cors from "cors";
-// import { handleUserSignUp } from "./modules/users/controllers/user.controller.js";
 
+import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
 import dotenv from "dotenv";
-import express, { Express, Request, Response } from "express";
+import express, { Express, Request, Response, NextFunction } from "express";
 import cors from "cors";
-import { handleUserSignUp } from "./modules/users/controllers/user.controller.js";
-import { handleCreateStore, handleListStoreReviews } from "./modules/stores/controllers/store.controller.js";
-import { handleCreateReview, handleListMyReviews } from "./modules/reviews/controllers/review.controller.js";
-// import { handleCreateMission } from "./modules/missions/controllers/mission.controller.js";
-import {
-  handleCreateMission,
-  handleChallengeMission,
-  handleListStoreMissions,
-  handleListOngoingUserMissions,
-  handleCompleteUserMission,
-} from "./modules/missions/controllers/mission.controller.js";
+import { RegisterRoutes } from "./generated/routes";
+import { AppError } from './common/errors/app.error.js';
+
 // 1. 환경 변수 설정
 dotenv.config();
 
 const app: Express = express();
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.success = function ({ message = null, data = null }) {
+    return this.json({
+      resultType: "SUCCESS",
+      error: null,
+      success: {
+        message,
+      },
+      data,
+    });
+  };
+
+  res.error = function ({ errorCode = null, message = null, data = null }) {
+    return this.json({
+      resultType: "FAILED",
+      error: { errorCode, message, data },
+      data: null,
+    });
+  };
+
+  next();
+});
+
+app.use(morgan('dev'));
+app.use(cookieParser()); 
+
+// const app=express();
+// app.get('/test', (req, res) => {
+//   res.send('Hello!');
+// });
+
+// // 쿠키 만드는 라우터 
+// app.get('/setcookie', (req, res) => {
+//     // 'myCookie'라는 이름으로 'hello' 값을 가진 쿠키를 생성
+//     res.cookie('myCookie', 'hello', { maxAge: 60000 }); // 60초간 유효
+//     res.send('쿠키가 생성되었습니다!');
+// });
+
+// // 쿠키 읽는 라우터 
+// app.get('/getcookie', (req, res) => {
+//     // cookie-parser 덕분에 req.cookies 객체에서 바로 꺼내 쓸 수 있음
+//     const myCookie = req.cookies.myCookie; 
+    
+//     if (myCookie) {
+//         console.log(req.cookies); // { myCookie: 'hello' }
+//         res.send(`당신의 쿠키: ${myCookie}`);
+//     } else {
+//         res.send('쿠키가 없습니다.');
+//     }
+// });
+
 const port = process.env.PORT || 3000;
 
 // 2. 미들웨어 설정
@@ -34,25 +75,22 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World! This is TypeScript Server!");
 });
 
-app.post("/api/v1/users/signup", handleUserSignUp);
-app.post("/api/v1/regions/:regionId/stores", handleCreateStore);
-app.post("/api/v1/stores/:storeId/reviews", handleCreateReview);
-app.post("/api/v1/stores/:storeId/missions", handleCreateMission);
-app.post(
-  "/api/v1/stores/:storeId/missions/:missionId/challenge",
-  handleChallengeMission
-);
-app.get("/api/v1/stores/:storeId/reviews", handleListStoreReviews);
-app.get("/api/v1/users/:userId/reviews", handleListMyReviews);
-app.get("/api/v1/stores/:storeId/missions", handleListStoreMissions);
-app.get(
-  "/api/v1/users/:userId/missions/ongoing",
-  handleListOngoingUserMissions
-);
-app.patch(
-  "/api/v1/users/:userId/missions/:missionId/complete",
-  handleCompleteUserMission
-);
+const router = express.Router();
+RegisterRoutes(router); 
+app.use("/api/v1", router);
+
+app.use((err: AppError, req: Request, res: Response, next: NextFunction) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  res.status(err.statusCode || 500).error({
+    errorCode: err.errorCode || "unknown",
+    message: err.message || null,
+    data: err.data || null,
+  });
+});
+
 // 4. 서버 시작
 app.listen(port, () => {
   console.log(`[server]: Server is running at <http://localhost>:${port}`);

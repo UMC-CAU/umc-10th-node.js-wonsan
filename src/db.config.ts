@@ -25,7 +25,7 @@ export const pool = mysql.createPool({
   user: process.env.DB_USER || "root", // user 이름
   port: parseInt(process.env.DB_PORT || "3306"), // 포트 번호
   // 환경 변수는 기본적으로 문자열이에요. 숫자가 필요한 port 필드를 위해 parseInt로 형변환을 해줍니다! 
-  database: process.env.DB_NAME || "umc_10th", // 데이터베이스 이름
+  database: process.env.DB_NAME || "umc_prisma", // 데이터베이스 이름
   password: process.env.DB_PASSWORD || "password", // 비밀번호
   waitForConnections: true,
   // Pool에 획득할 수 있는 connection이 없을 때,

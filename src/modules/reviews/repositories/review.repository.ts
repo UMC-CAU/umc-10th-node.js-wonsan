@@ -2,26 +2,21 @@ import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { pool } from "../../../db.config.js";
 import { prisma } from "../../../db.config.js";
 
-export const findStoreById = async (storeId: number): Promise<any | null> => {
-  const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT * FROM store WHERE id = ?;`,
-    [storeId]
-  );
 
-  if (rows.length === 0) return null;
-
-  return rows[0];
+export const findStoreById = async (storeId: number) => {
+  return await prisma.store.findUnique({
+    where: {
+      id: storeId,
+    },
+  });
 };
 
-export const findMemberById = async (memberId: number): Promise<any | null> => {
-  const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT * FROM member WHERE id = ?;`,
-    [memberId]
-  );
-
-  if (rows.length === 0) return null;
-
-  return rows[0];
+export const findUserById = async (userId: number) => {
+  return await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
 };
 
 export const addReview = async (data: {
@@ -43,7 +38,7 @@ export const addReview = async (data: {
 };
 
 export const getReview = async (reviewId: number) => {
-  return await prisma.review.findUniqueOrThrow({
+  return await prisma.review.findUnique({
     where: {
       id: reviewId,
     },

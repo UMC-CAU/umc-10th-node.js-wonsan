@@ -20,15 +20,12 @@ export const getStoreMissions = async (
   return missions;
 };
 
-export const findStoreById = async (storeId: number): Promise<any | null> => {
-  const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT * FROM store WHERE id = ?;`,
-    [storeId]
-  );
-
-  if (rows.length === 0) return null;
-
-  return rows[0];
+export const findStoreById = async (storeId: number) => {
+  return await prisma.store.findUnique({
+    where: {
+      id: storeId,
+    },
+  });
 };
 
 export const addMission = async (data: {
@@ -50,7 +47,7 @@ export const addMission = async (data: {
 };
 
 export const getMission = async (missionId: number) => {
-  return await prisma.mission.findUniqueOrThrow({
+  return await prisma.mission.findUnique({
     where: {
       id: missionId,
     },
@@ -59,6 +56,8 @@ export const getMission = async (missionId: number) => {
     },
   });
 };
+
+
 export const findUserMission = async (data: {
   userId: number;
   missionId: number;
@@ -83,6 +82,14 @@ export const addUserMission = async (data: {
       userId: data.userId,
       missionId: data.missionId,
       status: data.status,
+    },
+  });
+};
+
+export const findUserById = async (userId: number) => {
+  return await prisma.user.findUnique({
+    where: {
+      id: userId,
     },
   });
 };
