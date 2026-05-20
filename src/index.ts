@@ -7,6 +7,12 @@ import cors from "cors";
 import { RegisterRoutes } from "./generated/routes";
 import { AppError } from './common/errors/app.error.js';
 
+import swaggerUi from "swagger-ui-express";
+// ESM 환경에서는 JSON 파일을 가져올 때 아래와 같이 처리합니다.
+import path from "path";
+import fs from "fs";
+
+
 // 1. 환경 변수 설정
 dotenv.config();
 
@@ -37,30 +43,15 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use(morgan('dev'));
 app.use(cookieParser()); 
 
-// const app=express();
-// app.get('/test', (req, res) => {
-//   res.send('Hello!');
-// });
+// 1. TSOA가 생성한 swagger.json 읽어오기, 새로 추가한거임.
+const swaggerFile = JSON.parse(
+  fs.readFileSync(path.resolve("dist/swagger.json"), "utf8")
+);
 
-// // 쿠키 만드는 라우터 
-// app.get('/setcookie', (req, res) => {
-//     // 'myCookie'라는 이름으로 'hello' 값을 가진 쿠키를 생성
-//     res.cookie('myCookie', 'hello', { maxAge: 60000 }); // 60초간 유효
-//     res.send('쿠키가 생성되었습니다!');
-// });
+// 2. Swagger UI 연결
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// // 쿠키 읽는 라우터 
-// app.get('/getcookie', (req, res) => {
-//     // cookie-parser 덕분에 req.cookies 객체에서 바로 꺼내 쓸 수 있음
-//     const myCookie = req.cookies.myCookie; 
-    
-//     if (myCookie) {
-//         console.log(req.cookies); // { myCookie: 'hello' }
-//         res.send(`당신의 쿠키: ${myCookie}`);
-//     } else {
-//         res.send('쿠키가 없습니다.');
-//     }
-// });
+
 
 const port = process.env.PORT || 3000;
 

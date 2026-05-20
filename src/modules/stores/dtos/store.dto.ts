@@ -1,14 +1,22 @@
 export interface StoreCreateRequest {
+  /** 가게 이름 */
   name: string;
+  /** 가게 주소 */
   address: string;
+  /** 가게 평점 */
   score?: number;
 }
 
 export interface StoreCreateResponse {
+  /** 생성된 가게 ID */
   storeId: number;
+  /** 가게 이름 */
   name: string;
+  /** 가게 주소 */
   address: string;
+  /** 가게가 속한 지역 ID */
   regionId: number;
+  /** 가게가 속한 지역 이름 */
   regionName: string;
 }
 

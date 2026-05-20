@@ -38,6 +38,16 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ErrorResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "resultType": {"dataType":"enum","enums":["FAILED"],"required":true},
+            "error": {"dataType":"nestedObjectLiteral","nestedProperties":{"data":{"dataType":"union","subSchemas":[{"dataType":"any"},{"dataType":"enum","enums":[null]}],"required":true},"message":{"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}],"required":true},"errorCode":{"dataType":"union","subSchemas":[{"dataType":"string"},{"dataType":"enum","enums":[null]}],"required":true}},"required":true},
+            "data": {"dataType":"enum","enums":[null],"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserSignUpRequest": {
         "dataType": "refObject",
         "properties": {
@@ -152,12 +162,35 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse__message-string--data-unknown__": {
+    "MyReviewListItem": {
+        "dataType": "refObject",
+        "properties": {
+            "reviewId": {"dataType":"double","required":true},
+            "storeId": {"dataType":"double","required":true},
+            "storeName": {"dataType":"string","required":true},
+            "rating": {"dataType":"double","required":true},
+            "content": {"dataType":"string","required":true},
+            "createdAt": {"dataType":"string","required":true},
+            "images": {"dataType":"array","array":{"dataType":"string"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "MyReviewListResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "reviews": {"dataType":"array","array":{"dataType":"refObject","ref":"MyReviewListItem"},"required":true},
+            "pagination": {"dataType":"nestedObjectLiteral","nestedProperties":{"hasNext":{"dataType":"boolean","required":true},"cursor":{"dataType":"double","required":true}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse__message-string--data-MyReviewListResponse__": {
         "dataType": "refObject",
         "properties": {
             "resultType": {"dataType":"enum","enums":["SUCCESS"],"required":true},
             "error": {"dataType":"enum","enums":[null],"required":true},
-            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"data":{"dataType":"any","required":true},"message":{"dataType":"string","required":true}},"required":true},
+            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"data":{"ref":"MyReviewListResponse","required":true},"message":{"dataType":"string","required":true}},"required":true},
         },
         "additionalProperties": false,
     },
@@ -220,6 +253,94 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "userId": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StoreMissionListItem": {
+        "dataType": "refObject",
+        "properties": {
+            "missionId": {"dataType":"double","required":true},
+            "content": {"dataType":"string","required":true},
+            "point": {"dataType":"double","required":true},
+            "deadline": {"dataType":"string","required":true},
+            "createdAt": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StoreMissionListResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "missions": {"dataType":"array","array":{"dataType":"refObject","ref":"StoreMissionListItem"},"required":true},
+            "pagination": {"dataType":"nestedObjectLiteral","nestedProperties":{"hasNext":{"dataType":"boolean","required":true},"cursor":{"dataType":"double","required":true}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse__message-string--data-StoreMissionListResponse__": {
+        "dataType": "refObject",
+        "properties": {
+            "resultType": {"dataType":"enum","enums":["SUCCESS"],"required":true},
+            "error": {"dataType":"enum","enums":[null],"required":true},
+            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"data":{"ref":"StoreMissionListResponse","required":true},"message":{"dataType":"string","required":true}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "OngoingUserMissionListItem": {
+        "dataType": "refObject",
+        "properties": {
+            "userMissionId": {"dataType":"double","required":true},
+            "missionId": {"dataType":"double","required":true},
+            "storeId": {"dataType":"double","required":true},
+            "storeName": {"dataType":"string","required":true},
+            "content": {"dataType":"string","required":true},
+            "point": {"dataType":"double","required":true},
+            "deadline": {"dataType":"string","required":true},
+            "status": {"dataType":"string","required":true},
+            "challengedAt": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "OngoingUserMissionListResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "missions": {"dataType":"array","array":{"dataType":"refObject","ref":"OngoingUserMissionListItem"},"required":true},
+            "pagination": {"dataType":"nestedObjectLiteral","nestedProperties":{"hasNext":{"dataType":"boolean","required":true},"cursor":{"dataType":"double","required":true}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse__message-string--data-OngoingUserMissionListResponse__": {
+        "dataType": "refObject",
+        "properties": {
+            "resultType": {"dataType":"enum","enums":["SUCCESS"],"required":true},
+            "error": {"dataType":"enum","enums":[null],"required":true},
+            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"data":{"ref":"OngoingUserMissionListResponse","required":true},"message":{"dataType":"string","required":true}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CompletedUserMissionResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "userMissionId": {"dataType":"double","required":true},
+            "userId": {"dataType":"double","required":true},
+            "missionId": {"dataType":"double","required":true},
+            "status": {"dataType":"string","required":true},
+            "completedAt": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse__message-string--data-CompletedUserMissionResponse__": {
+        "dataType": "refObject",
+        "properties": {
+            "resultType": {"dataType":"enum","enums":["SUCCESS"],"required":true},
+            "error": {"dataType":"enum","enums":[null],"required":true},
+            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"data":{"ref":"CompletedUserMissionResponse","required":true},"message":{"dataType":"string","required":true}},"required":true},
         },
         "additionalProperties": false,
     },
@@ -293,7 +414,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -322,7 +443,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -352,7 +473,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -382,7 +503,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -412,7 +533,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -504,7 +625,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -535,7 +656,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -629,7 +750,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -660,7 +781,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);
@@ -691,7 +812,7 @@ export function RegisterRoutes(app: Router) {
                 response,
                 next,
                 validatedArgs,
-                successStatus: undefined,
+                successStatus: 200,
               });
             } catch (err) {
                 return next(err);

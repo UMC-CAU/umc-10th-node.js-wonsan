@@ -1,27 +1,112 @@
 export interface MissionCreateRequest {
+  /** 미션 내용 */
   content: string;
+  /** 미션 완료 보상 포인트 */
   point: number;
+  /** 미션 마감일 */
   deadline: string;
 }
 
 export interface MissionCreateResponse {
+  /** 생성된 미션 ID */
   missionId: number;
+  /** 미션이 속한 가게 ID */
   storeId: number;
+  /** 미션이 속한 가게 이름 */
   storeName: string;
+  /** 미션 내용 */
   content: string;
+  /** 미션 완료 보상 포인트 */
   point: number;
+  /** 미션 마감일 */
   deadline: Date;
 }
 
 export interface MissionChallengeRequest {
+  /** 미션에 도전하는 사용자 ID */
   userId: number;
 }
 
 export interface MissionChallengeResponse {
+  /** 사용자 미션 ID */
   userMissionId: number;
+  /** 미션에 도전한 사용자 ID */
   userId: number;
+  /** 도전한 미션 ID */
   missionId: number;
+  /** 사용자 미션 상태 */
   status: string;
+}
+
+export interface StoreMissionListItem {
+  /** 미션 ID */
+  missionId: number;
+  /** 미션 내용 */
+  content: string;
+  /** 미션 완료 보상 포인트 */
+  point: number;
+  /** 미션 마감일 */
+  deadline: string;
+  /** 미션 생성일 */
+  createdAt: string;
+}
+
+export interface StoreMissionListResponse {
+  /** 특정 가게의 미션 목록 */
+  missions: StoreMissionListItem[];
+  /** 페이지네이션 정보 */
+  pagination: {
+    /** 다음 조회에 사용할 cursor */
+    cursor: number;
+    /** 다음 페이지 존재 여부 */
+    hasNext: boolean;
+  };
+}
+
+export interface OngoingUserMissionListItem {
+  /** 사용자 미션 ID */
+  userMissionId: number;
+  /** 미션 ID */
+  missionId: number;
+  /** 가게 ID */
+  storeId: number;
+  /** 가게 이름 */
+  storeName: string;
+  /** 미션 내용 */
+  content: string;
+  /** 미션 완료 보상 포인트 */
+  point: number;
+  /** 미션 마감일 */
+  deadline: string;
+  /** 사용자 미션 상태 */
+  status: string;
+  /** 미션 도전일 */
+  challengedAt: string;
+}
+
+export interface OngoingUserMissionListResponse {
+  /** 진행 중인 미션 목록 */
+  missions: OngoingUserMissionListItem[];
+  /** 페이지네이션 정보 */
+  pagination: {
+    /** 다음 조회에 사용할 cursor */
+    cursor: number;
+    /** 다음 페이지 존재 여부 */
+    hasNext: boolean;
+  };
+}
+
+export interface CompletedUserMissionResponse {
+  /** 사용자 미션 ID */
+  userMissionId: number;
+  /** 사용자 ID */
+  userId: number;
+  /** 완료한 미션 ID */
+  missionId: number;
+  /** 완료 후 사용자 미션 상태 */
+  status: string;
+  /** 미션 완료일 */
+  completedAt: string;
 }
 
 export const bodyToMission = (body: MissionCreateRequest) => {
@@ -48,7 +133,7 @@ export const responseFromStoreMissions = (
   missions: any[],
   cursor: number,
   limit: number = 10
-) => {
+): StoreMissionListResponse => {
   const hasNext = missions.length > limit;
   const slicedMissions = hasNext ? missions.slice(0, limit) : missions;
 
@@ -71,7 +156,7 @@ export const responseFromOngoingUserMissions = (
   userMissions: any[],
   cursor: number,
   limit: number = 10
-) => {
+): OngoingUserMissionListResponse => {
   const hasNext = userMissions.length > limit;
 
   const slicedUserMissions = hasNext
@@ -103,7 +188,7 @@ export const responseFromOngoingUserMissions = (
   };
 };
 
-export const responseFromCompletedUserMission = (userMission: any) => {
+export const responseFromCompletedUserMission = (userMission: any): CompletedUserMissionResponse => {
   return {
     userMissionId: userMission.id,
     userId: userMission.userId,
